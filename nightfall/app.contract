@@ -1,8 +1,25 @@
+keyframes title-in
+  from opacity=0 translate="0px 12px" scale=0.96
+  to opacity=1 translate="0px 0px" scale=1
+
+keyframes load-fill
+  from scale=0.01
+  to scale=1
+
+font "Oriental Chicken" = "assets/fonts/OrientalChicken.ttf"
+
+shape Viewport
+  width: number
+  height: number
+  prefersReducedMotion: bool
+
 shape Greeting
   text: string
 
-component Beef
+component Nightfall
   resource intro = greeting() as shape Greeting
+  resource viewport = exactViewport() as shape Viewport
+  derive reduceMotion = viewport.prefersReducedMotion
   state started = false
   state playerHealth = 100
   state rivalHealth = 100
@@ -49,19 +66,21 @@ component Beef
     combo = 0
     blocking = false
 
+  task enterMatch mount
+    after(1400, start)
+
   view
-    main width="100%" height="100%" background-color="#08090d" color="#f4efe8" padding=20
+    main width="100%" height="100%" box-sizing="border-box" background-color="#08090d" color="#f4efe8" padding=20
       if not started
-        column height="100%" align-items="center" justify-content="center" gap=24
-          text "BEEF" font-size=76 font-weight=800 color="#f47c38" testId="title"
-          text intro.text font-size=17 color="#a7a6ad" testId="tagline"
-          button press=start padding=18 background-color="#f47c38" testId="play"
-            text "ENTER THE ARENA" font-size=15 font-weight=700 color="#111116"
+        column width="100%" height="100%" align-items="center" justify-content="center" gap=28 testId="splash"
+          text "NIGHTFALL" font-family="Oriental Chicken" font-size=76 color="#e9c17b" animation=(reduceMotion ? "none" : "title-in 750ms cubic-bezier(0.23, 1, 0.32, 1) both") testId="title"
+          box width=120 height=3 border-radius=2 overflow="hidden" background-color="#382019" role="progressbar" aria-label="Loading game" aria-valuemin=0 aria-valuemax=100 aria-valuenow=(reduceMotion ? 100 : 0) testId="loading-track"
+            box width="100%" height="100%" border-radius=2 background-color="#e9c17b" transform-origin="left center" scale=(reduceMotion ? 1 : 0.01) animation=(reduceMotion ? "none" : "load-fill 1400ms linear both") testId="loading-fill"
       else
         column width="100%" max-width=1040 height="100%" margin="0 auto" gap=18
           row align-items="center" justify-content="space-between"
             column gap=2
-              text "BEEF" font-size=28 font-weight=800 color="#f47c38"
+              text "NIGHTFALL" font-family="Oriental Chicken" font-size=28 color="#f47c38"
               text "THE CLOUT CIRCUIT" font-size=11 letter-spacing=2 color="#777782"
             column align-items="center" gap=3
               text "ROUND 01" font-size=12 font-weight=700 color="#d8d0c6"

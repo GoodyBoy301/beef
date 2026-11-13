@@ -1,13 +1,13 @@
 {
   "$schema": "../node_modules/.cache/exact/scripts/app.schema.json",
-  "name": "BEEF",
-  "short_name": "BEEF",
-  "id": "com.studioyin.beef",
+  "name": "Nightfall",
+  "short_name": "Nightfall",
+  "id": "com.studioyin.nightfall",
   "start_url": "/",
   "display": "standalone",
   "app": {
-    "id": "com.studioyin.beef",
-    "name": "BEEF"
+    "id": "com.studioyin.nightfall",
+    "name": "Nightfall"
   },
   "host": {
     "web": {}

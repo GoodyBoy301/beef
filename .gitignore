@@ -1,5 +1,5 @@
 node_modules/
-app/.exact/
-app/.shells/
-app/target/
-app/dist/
+nightfall/.exact/
+nightfall/.shells/
+nightfall/target/
+nightfall/dist/

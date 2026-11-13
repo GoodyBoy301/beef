@@ -1,5 +1,11 @@
+test "opening splash shows the title and loading state"
+  expect text "title" == "NIGHTFALL"
+  expect tree has "loading-track"
+  expect tree has "loading-fill"
+  expect tree missing "play"
+
 test "guard absorbs a rival attack"
-  tap "play"
+  clock +1400
   expect tree has "fireboy-fighter"
   tap "strike"
   expect state rivalHealth == 88
@@ -13,7 +19,7 @@ test "guard absorbs a rival attack"
   expect state playerHealth == 90
 
 test "hype unlocks a special and ends the round"
-  tap "play"
+  clock +1400
   tap "strike"
   tap "strike"
   tap "strike"
@@ -27,7 +33,7 @@ test "hype unlocks a special and ends the round"
   expect text "result" == "VICTORY"
 
 test "reset starts a fresh fight"
-  tap "play"
+  clock +1400
   tap "enemy-strike"
   tap "restart"
   expect state playerHealth == 100
