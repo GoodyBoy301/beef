@@ -1,0 +1,35 @@
+test "guard absorbs a rival attack"
+  tap "play"
+  expect tree has "fireboy-fighter"
+  tap "strike"
+  expect state rivalHealth == 88
+  expect state hype == 9
+  tap "guard"
+  tap "enemy-strike"
+  expect state playerHealth == 100
+  expect state hype == 17
+  tap "guard"
+  tap "enemy-strike"
+  expect state playerHealth == 90
+
+test "hype unlocks a special and ends the round"
+  tap "play"
+  tap "strike"
+  tap "strike"
+  tap "strike"
+  tap "strike"
+  tap "kick"
+  expect state rivalHealth == 34
+  expect state hype == 50
+  tap "special"
+  expect state rivalHealth == 0
+  expect state hype == 0
+  expect text "result" == "VICTORY"
+
+test "reset starts a fresh fight"
+  tap "play"
+  tap "enemy-strike"
+  tap "restart"
+  expect state playerHealth == 100
+  expect state rivalHealth == 100
+  expect state hype == 0

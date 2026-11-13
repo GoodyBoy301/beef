@@ -1,0 +1,20 @@
+{
+  "$schema": "../node_modules/.cache/exact/scripts/app.schema.json",
+  "name": "BEEF",
+  "short_name": "BEEF",
+  "id": "com.studioyin.beef",
+  "start_url": "/",
+  "display": "standalone",
+  "app": {
+    "id": "com.studioyin.beef",
+    "name": "BEEF"
+  },
+  "host": {
+    "web": {}
+  },
+  "deploy": {
+    "store": {
+      "web": "0"
+    }
+  }
+}

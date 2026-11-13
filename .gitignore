@@ -1,0 +1,5 @@
+node_modules/
+app/.exact/
+app/.shells/
+app/target/
+app/dist/

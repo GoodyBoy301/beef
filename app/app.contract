@@ -1,0 +1,116 @@
+shape Greeting
+  text: string
+
+component Beef
+  resource intro = greeting() as shape Greeting
+  state started = false
+  state playerHealth = 100
+  state rivalHealth = 100
+  state hype = 0
+  state combo = 0
+  state blocking = false
+
+  action start
+    started = true
+
+  action strike
+    if rivalHealth > 0
+      rivalHealth = max(0, rivalHealth - 12)
+      hype = min(100, hype + 9)
+      combo = combo + 1
+
+  action kick
+    if rivalHealth > 0
+      rivalHealth = max(0, rivalHealth - 18)
+      hype = min(100, hype + 14)
+      combo = combo + 1
+
+  action special
+    if hype >= 50 and rivalHealth > 0
+      rivalHealth = max(0, rivalHealth - 35)
+      hype = hype - 50
+      combo = combo + 1
+
+  action toggleGuard
+    blocking = not blocking
+
+  action enemyStrike
+    if blocking
+      hype = min(100, hype + 8)
+    else
+      playerHealth = max(0, playerHealth - 10)
+      combo = 0
+
+  action rematch
+    started = true
+    playerHealth = 100
+    rivalHealth = 100
+    hype = 0
+    combo = 0
+    blocking = false
+
+  view
+    main width="100%" height="100%" background-color="#08090d" color="#f4efe8" padding=20
+      if not started
+        column height="100%" align-items="center" justify-content="center" gap=24
+          text "BEEF" font-size=76 font-weight=800 color="#f47c38" testId="title"
+          text intro.text font-size=17 color="#a7a6ad" testId="tagline"
+          button press=start padding=18 background-color="#f47c38" testId="play"
+            text "ENTER THE ARENA" font-size=15 font-weight=700 color="#111116"
+      else
+        column width="100%" max-width=1040 height="100%" margin="0 auto" gap=18
+          row align-items="center" justify-content="space-between"
+            column gap=2
+              text "BEEF" font-size=28 font-weight=800 color="#f47c38"
+              text "THE CLOUT CIRCUIT" font-size=11 letter-spacing=2 color="#777782"
+            column align-items="center" gap=3
+              text "ROUND 01" font-size=12 font-weight=700 color="#d8d0c6"
+              text "BEST OF THREE" font-size=10 letter-spacing=1 color="#777782"
+            button press=rematch testId="restart" padding=10 border-radius=8 background-color="#202127"
+              text "RESET" font-size=11 font-weight=700 color="#e6e0d9"
+          row gap=24
+            column flex=1 gap=8
+              row justify-content="space-between" align-items="center"
+                text "FIREBOY" font-size=13 font-weight=700 color="#f4efe8"
+                text `${playerHealth}%` font-size=12 color="#b8b5bb" testId="player-health-label"
+              box height=10 border-radius=5 background-color="#282a31" overflow="hidden"
+                box width=`${playerHealth}%` height="100%" border-radius=5 background-color="#f47c38" testId="player-health"
+            column flex=1 gap=8
+              row justify-content="space-between" align-items="center"
+                text "ICE PRINCE" font-size=13 font-weight=700 color="#f4efe8"
+                text `${rivalHealth}%` font-size=12 color="#b8b5bb" testId="rival-health-label"
+              box height=10 border-radius=5 background-color="#282a31" overflow="hidden"
+                box width=`${rivalHealth}%` height="100%" border-radius=5 background-color="#62d5ed" testId="rival-health"
+          row flex=1 min-height=240 align-items="center" justify-content="space-around" gap=20 border-radius=18 background-color="#101319" padding=20
+            column align-items="center" gap=12 testId="fireboy-fighter"
+              box width=92 height=92 border-radius=46 background-color="#202229" border-width=3 border-style="solid" border-color="#f47c38"
+              box width=104 height=132 border-radius=28 background-color="#191b21" border-width=2 border-style="solid" border-color="#733b28"
+              text "FIREBOY" font-size=12 font-weight=700 letter-spacing=1 color="#f47c38"
+            column align-items="center" gap=8
+              if rivalHealth > 0 and playerHealth > 0
+                text (blocking ? "GUARDING" : (combo > 1 ? `COMBO ×${combo}` : "FIGHT!")) font-size=15 font-weight=700 color="#f0b27c" testId="fight-status"
+                text "LAGOS · NEON DISTRICT" font-size=10 letter-spacing=1 color="#777782"
+              else
+                text (rivalHealth == 0 ? "VICTORY" : "DEFEAT") font-size=28 font-weight=800 color="#f47c38" testId="result"
+                button press=rematch padding=12 background-color="#f47c38" testId="rematch"
+                  text "FIGHT AGAIN" font-size=12 font-weight=700 color="#111116"
+            column align-items="center" gap=12 testId="ice-prince-fighter"
+              box width=92 height=92 border-radius=46 background-color="#202229" border-width=3 border-style="solid" border-color="#62d5ed"
+              box width=104 height=132 border-radius=28 background-color="#191b21" border-width=2 border-style="solid" border-color="#315a69"
+              text "ICE PRINCE" font-size=12 font-weight=700 letter-spacing=1 color="#62d5ed"
+          row align-items="center" gap=12
+            text "HYPE" font-size=11 font-weight=700 letter-spacing=2 color="#a7a6ad"
+            box flex=1 height=8 border-radius=4 background-color="#282a31" overflow="hidden"
+              box width=`${hype}%` height="100%" border-radius=4 background-color="#d8b45c" testId="hype-meter"
+            text `${hype}%` font-size=12 color="#d8b45c" testId="hype-label"
+          row justify-content="center" gap=10
+            button press=strike disabled=(rivalHealth == 0 or playerHealth == 0) padding=14 border-radius=10 background-color="#24252c" testId="strike"
+              text "STRIKE" font-size=12 font-weight=700 color="#f4efe8"
+            button press=kick disabled=(rivalHealth == 0 or playerHealth == 0) padding=14 border-radius=10 background-color="#24252c" testId="kick"
+              text "KICK" font-size=12 font-weight=700 color="#f4efe8"
+            button press=toggleGuard disabled=(playerHealth == 0 or rivalHealth == 0) padding=14 border-radius=10 background-color="#24252c" testId="guard"
+              text (blocking ? "LOWER GUARD" : "GUARD") font-size=12 font-weight=700 color="#f4efe8"
+            button press=enemyStrike disabled=(playerHealth == 0 or rivalHealth == 0) padding=14 border-radius=10 background-color="#3b2726" testId="enemy-strike"
+              text "RIVAL ATTACK" font-size=12 font-weight=700 color="#f2a38b"
+            button press=special disabled=(hype < 50 or rivalHealth == 0 or playerHealth == 0) padding=14 border-radius=10 background-color="#d8b45c" testId="special"
+              text "SPECIAL · 50 HYPE" font-size=12 font-weight=700 color="#171719"
